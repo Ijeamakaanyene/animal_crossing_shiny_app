@@ -19,7 +19,7 @@ ui = fluidPage(
   
   sidebarLayout(
     sidebarPanel(
-      helpText("If you were a village in Animal Crossing, who would you be?
+      helpText("If you were a villager in Animal Crossing, who would you be?
                Select from the inputs below to find out."),
       
       selectInput("personality_vars",
@@ -29,6 +29,9 @@ ui = fluidPage(
       selectInput("species_vars",
                   label = "Choose your species",
                   choices = unique(villagers_data$species)),
+      
+      actionButton(inputId = "run", 
+                   label = "Click to see your Villager!")
       
     ),
     
@@ -44,7 +47,7 @@ server = function(input, output, session){
     updateSelectInput(session, "personality_vars",
                       label = "Choose your personality",
                       choices = unique(villagers_data$personality)
-                      )})
+    )})
   
   observe({
     updateSelectInput(session, "species_vars",
@@ -52,18 +55,20 @@ server = function(input, output, session){
                       choices = species_available(input$personality_vars, 
                                                   villagers_data),
                       selected = NULL)
-    })
+  })
   
-  observe({
-
-      characters_available_df = characters_available(input$species_vars, 
-                                                     input$personality_vars,
-                                                     villagers_data)
-      
-      output$animal_crossing_table = gt::render_gt({
-        generate_character(characters_available_df)
-      })
+  observeEvent(input$run, {
+    
+    characters_available_df = characters_available(input$species_vars, 
+                                                   input$personality_vars,
+                                                   villagers_data)
+    
+    output$animal_crossing_table = gt::render_gt({
+      generate_character(characters_available_df)
     })
+  })
+  
+  
     
 }
 
