@@ -12,8 +12,6 @@ source(here::here("Scripts", "02_select_villager.R"))
 # Shiny App UI
 ui = fluidPage(
   
-  tags$style(type = "text/css", "html, body {width:100%;height:100%}"),
-  
   titlePanel(
     h1("Choose Your Fighter: Animal Crossing New Horizons", align = "center")),
   
@@ -31,14 +29,16 @@ ui = fluidPage(
                   choices = unique(villagers_data$species)),
       
       actionButton(inputId = "run", 
-                   label = "Click to see your Villager!")
+                   label = "Click to see your Villager!",
+                   align = "center")
       
     ),
     
     mainPanel(
       h6("A #TidyTuesday Project | Data from VillagerDB", align = "center"),
       gt::gt_output("animal_crossing_table"))
-  ), 
+  ),
+  
 )
 
 server = function(input, output, session){
