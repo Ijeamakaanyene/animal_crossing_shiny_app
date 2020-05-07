@@ -25,24 +25,7 @@ characters_available = function(species_selected, personality_selected, df){
 }
 
 
-select_item = function(category_selected, df){
-  
-  items_selected = df %>%
-    dplyr::filter(category == !!category_selected) %>%
-    select(name, sell_value, buy_value) %>%
-    mutate(sell_value = as.character(sell_value),
-           buy_value = as.character(buy_value)) %>%
-    sample_n(size = 1) %>%
-    tidyr::replace_na(list(buy_value = "Cannot Purchase",
-                           sell_value = "Cannot Sell"))
-  
-  colnames(items_selected) = c("Item Name", "Sell Value", "Buy Value")
-  
-  return(items_selected)
-}
-
-
-generate_character = function(characters_available_df, items_selected_df){
+generate_character = function(characters_available_df){
   
   character_selected = characters_available_df %>%
     dplyr::sample_n(size = 1) %>%
@@ -50,9 +33,7 @@ generate_character = function(characters_available_df, items_selected_df){
     
   colnames(character_selected) = c("Image", "Name", "Gender", "Song",
                                    "Phrase")
-  
-  character_selected = dplyr::bind_cols(character_selected, 
-                                        items_selected_df)
+
   
   character_selected = character_selected %>%
     tidyr::pivot_longer(everything(),

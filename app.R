@@ -4,7 +4,6 @@ library(gt)
 library(tidyr)
 
 villagers_data = readr::read_rds(here::here("Data", "villagers_data.rds"))
-items_data = readr::read_rds(here::here("Data", "items_data.rds"))
 
 # Load in functions
 source(here::here("Scripts", "02_select_villager.R"))
@@ -12,12 +11,15 @@ source(here::here("Scripts", "02_select_villager.R"))
 
 # Shiny App UI
 ui = fluidPage(
+  
+  tags$style(type = "text/css", "html, body {width:100%;height:100%}"),
+  
   titlePanel(
     h1("Choose Your Fighter: Animal Crossing New Horizons", align = "center")),
   
   sidebarLayout(
     sidebarPanel(
-      helpText("If you were a village in Animal Crossing, who would you be and what would be your first item?
+      helpText("If you were a village in Animal Crossing, who would you be?
                Select from the inputs below to find out."),
       
       selectInput("personality_vars",
@@ -27,10 +29,6 @@ ui = fluidPage(
       selectInput("species_vars",
                   label = "Choose your species",
                   choices = unique(villagers_data$species)),
-      
-      selectInput("item_vars",
-                  label = "Choose your item category",
-                  choices = unique(items_data$category))
       
     ),
     
@@ -62,11 +60,8 @@ server = function(input, output, session){
                                                      input$personality_vars,
                                                      villagers_data)
       
-      items_selected_df = select_item(input$item_vars, 
-                                      items_data)
-      
       output$animal_crossing_table = gt::render_gt({
-        generate_character(characters_available_df, items_selected_df)
+        generate_character(characters_available_df)
       })
     })
     
