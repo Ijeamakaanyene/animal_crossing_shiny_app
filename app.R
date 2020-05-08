@@ -13,7 +13,8 @@ source(here::here("Scripts", "02_select_villager.R"))
 ui = fluidPage(
   
   titlePanel(
-    h1("Choose Your Fighter: Animal Crossing New Horizons", align = "center")),
+    h1("Choose Your Fighter: Animal Crossing New Horizons", align = "center"),
+       windowTitle = "Your Animal Crossing Persona"),
   
   sidebarLayout(
     sidebarPanel(
